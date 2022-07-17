@@ -162,28 +162,28 @@ jobs:
           path: ./backend/test_results
 
 
-  scan-frontend:
-    executor: node
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - run:
-          name: Check Frontend against security vulnerabilities
-          working_directory: ./frontend
-          command: npm audit --audit-level=critical
-
-
-  scan-backend:
-    executor: node
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
-      - run:
-          name: Check Backend against security vulnerabilities
-          working_directory: ./backend
-          command: npm audit --audit-level=critical
+#  scan-frontend:
+#    executor: node
+#    steps:
+#      - checkout
+#      - attach_workspace:
+#          at: .
+#      - run:
+#          name: Check Frontend against security vulnerabilities
+#          working_directory: ./frontend
+#          command: npm audit --audit-level=critical
+#
+#
+#  scan-backend:
+#    executor: node
+#    steps:
+#      - checkout
+#      - attach_workspace:
+#          at: .
+#      - run:
+#          name: Check Backend against security vulnerabilities
+#          working_directory: ./backend
+#          command: npm audit --audit-level=critical
 
 
   deploy-infrastructure:
@@ -477,12 +477,12 @@ workflows:
       - test-frontend:
           requires:
             -  build-frontend
-      - scan-backend:
-          requires:
-            - build-backend
-      - scan-frontend:
-          requires:
-            - build-frontend
+#      - scan-backend:
+#          requires:
+#            - build-backend
+#      - scan-frontend:
+#          requires:
+#            - build-frontend
 
       ## INFRASTRUCTURE
       - deploy-infrastructure:
