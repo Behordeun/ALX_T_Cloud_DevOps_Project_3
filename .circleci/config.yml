@@ -1,49 +1,4 @@
-version: '2.1'
-orbs:
-  slack: circleci/slack@4.1
-jobs:
-  deploy:
-    docker:
-      - image: 'circleci/node:4.1'
-    steps:
-      - run: echo "deploy my app"
-      - slack/notify:
-          event: fail
-          mentions: '@Muhammad'
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          template: success_tagged_deploy_1
-  test:
-    docker:
-      - image: 'cimg/base:stable'
-    steps:
-      - run: echo "test my app"
-workflows:
-  test-and-deploy:
-    jobs:
-      - test
-      - slack/on-hold:
-          context: slack-secrets
-          filters:
-            tags:
-              only: /^v.*/
-          requires:
-            - test
-      - pause_workflow:
-          filters:
-            tags:
-              only: /^v.*/
-          requires:
-            - test
-            - slack/on-hold
-          type: approval
-      - deploy:
-          filters:
-            tags:
-              only: /^v.*/
-          requires:
-            - pause_workflow
+version: 2.1
 
 
 executors:
@@ -288,7 +243,7 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["06:55:19:5c:75:9c:0c:fa:5e:f0:ed:c4:2b:35:ec:76"]
+          fingerprints: ["9a:ea:15:ab:01:da:78:98:f9:7b:bd:05:4f:ea:75:e3"]
       - attach_workspace:
           at: .
       - run:
