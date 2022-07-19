@@ -1,0 +1,19 @@
+---
+- name: 'extract zipped backend'
+  become: yes
+  copy:
+    src: ~/project/backend.tar.gz
+    dest: /home/ubuntu/backend.tar.gz
+
+- name: 'run node application'
+  become: yes
+  shell: |
+    cd /home/ubuntu
+    # mkdir app
+    # mv backend.tar.gz app/backend.tar.gz
+    # cd app
+    tar xzvf backend.tar.gz 
+    npm i 
+    npm run build
+    pm2 stop default
+    pm2 start npm -- start

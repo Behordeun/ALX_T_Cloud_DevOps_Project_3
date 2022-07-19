@@ -1,5 +1,6 @@
 Description: >
   UdaPeople frontend stack.
+
 Parameters:
   ID:
     Description: Unique identifier.
