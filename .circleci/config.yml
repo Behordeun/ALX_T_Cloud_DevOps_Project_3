@@ -24,7 +24,7 @@ commands:
     description: Send alert notifications to slack when there is a job failure.
     steps:
       - slack/notify:
-          channel: circleci-behordeun
+          channel: CircleCi-Behordeun
           event: fail
           template: basic_fail_1
   revert-migrations:
