@@ -74,3 +74,4 @@ node_modules
 .env
 dist
 .env.sample
+.circleci/config.txt
