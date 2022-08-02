@@ -225,8 +225,8 @@ jobs:
           command: |
             cd backend
             npm i
-            npm run migrations > migrations_dump.txt
-            cat migrations_dump.txt
+            npm run migrations > migration_status
+            
       - run:
           name: Send migration results to kvdb
           command: |
