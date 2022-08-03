@@ -72,7 +72,7 @@ commands:
 jobs:
   build-frontend:
     docker:
-      - image: node:lts-slim
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -90,7 +90,7 @@ jobs:
 
   build-backend:
     docker:
-      - image: node:lts-slim
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -108,7 +108,7 @@ jobs:
 
   test-frontend:
     docker:
-      - image: node:lts-slim
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -121,7 +121,7 @@ jobs:
             npm run test
   test-backend:
     docker:
-      - image: node:lts-slim
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -134,7 +134,7 @@ jobs:
             npm run test
   scan-frontend:
     docker:
-      - image: node:lts-slim
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -148,7 +148,7 @@ jobs:
             npm audit --audit-level=critical
   scan-backend:
     docker:
-      - image: node:lts-slim
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -219,7 +219,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: node:lts-slim 
+      - image: circleci/node:lts-slim
     steps:
       - checkout
       - aws-cli/setup
