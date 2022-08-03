@@ -13,7 +13,7 @@
     # mv backend.tar.gz app/backend.tar.gz
     # cd app
     tar xzvf backend.tar.gz 
-    npm i 
+    npm install 
     npm run build
     pm2 stop default
     pm2 start npm -- start
