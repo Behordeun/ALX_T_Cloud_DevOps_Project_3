@@ -219,7 +219,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:alpine3
+      - image: circleci/node:alpine
     steps:
       - checkout
       - aws-cli/setup
