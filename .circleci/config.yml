@@ -326,7 +326,6 @@ jobs:
           command: |
             cd backend
             npm install
-            npm fix audit
             npm run build
             ls -lh
             cd ..
