@@ -266,7 +266,7 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: python:3.9.1-alpine
+      - image: python:3.9.1
     steps:
       - checkout
       - attach_workspace:
@@ -326,6 +326,7 @@ jobs:
           command: |
             cd backend
             npm install
+            npm fix audit
             npm run build
             ls -lh
             cd ..
