@@ -66,7 +66,7 @@ commands:
             if (( $SUCCESS == 1 ));
             then
               cd ~/project/backend
-              npm i
+              npm install
               npm run migration:revert
             fi
 jobs:
@@ -81,7 +81,7 @@ jobs:
           name: Build front-end
           command: |
             cd frontend
-            npm i
+            npm install
             npm run build
       - save_cache:
           paths: [frontend/node_modules]
@@ -99,7 +99,7 @@ jobs:
           name: Back-end build
           command: |
             cd backend
-            npm i
+            npm install
             npm run build
       - save_cache:
           paths: [backend/node_modules]
@@ -117,7 +117,7 @@ jobs:
           name: Test frontend
           command: |
             cd frontend
-            npm i
+            npm install
             npm run test
   test-backend:
     docker:
@@ -130,7 +130,7 @@ jobs:
           name: Test backend
           command: |
             cd backend
-            npm i
+            npm install
             npm run test
   scan-frontend:
     docker:
@@ -143,7 +143,7 @@ jobs:
           name: Analyze frontend
           command: |
             cd frontend
-            npm i
+            npm install
             npm audit fix --force --audit-level=critical
             npm audit --audit-level=critical
   scan-backend:
@@ -157,7 +157,7 @@ jobs:
           name: Build backend
           command: |
             cd backend
-            npm i
+            npm install
             npm audit fix --force --audit-level=critical
             npm audit fix --force --audit-level=critical
             npm audit --audit-level=critical
@@ -219,7 +219,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: node:lts-slim
+      - image: circleci/node:alpine3
     steps:
       - checkout
       - aws-cli/setup
@@ -229,7 +229,7 @@ jobs:
           name: Run migrations
           command: |
               cd backend
-              npm i
+              npm install
               # npm audit fix
               # Run and save the migration output
               npm run migrations > migrations_dump.txt
@@ -284,7 +284,7 @@ jobs:
           name: Deploy frontend objects
           command: |
             cd frontend
-            npm i
+            npm install
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
@@ -314,7 +314,7 @@ jobs:
           name: Deploy backend
           command: |
             cd backend
-            npm i
+            npm install
             npm fix audit
             npm run build
             ls -lh
