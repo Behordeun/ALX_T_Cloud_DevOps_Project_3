@@ -222,7 +222,7 @@ jobs:
       - image: circleci/node:alpine
     steps:
       - checkout
-      - aws-cli/setup
+      # - aws-cli/setup
       - attach_workspace:
           at: ~/
       - run:
