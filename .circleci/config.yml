@@ -256,10 +256,10 @@ jobs:
                 curl https://kvdb.io/7wRafaoScKLygxUg7EeoYC/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
               fi
 
-      #- persist_to_workspace:
-      #    root: ~/
-      #    paths:
-      #        - project/backend/migrations_dump.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+              - project/backend/migrations_dump.txt
       - revert-migrations
       - destroy-environment
 
