@@ -346,7 +346,7 @@ jobs:
 
   smoke-test:
     docker:
-      - image: python:3.9.1
+      - image: python:3.9.1-alpine3.12
     steps:
       - checkout
       - attach_workspace:
