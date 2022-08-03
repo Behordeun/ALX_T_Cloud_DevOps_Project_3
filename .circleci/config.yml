@@ -266,7 +266,7 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: python:3.9.1
+      - image: python:3.9.1-alpine
     steps:
       - checkout
       - attach_workspace:
@@ -309,7 +309,7 @@ jobs:
 
   deploy-backend:
     docker:
-      - image: python:3.9.1:Alpine
+      - image: python:3.9.1-alpine
     steps:
       - checkout
       - add_ssh_keys:
@@ -345,7 +345,7 @@ jobs:
 
   smoke-test:
     docker:
-      - image: python:3.9.1:Alpine
+      - image: python:3.9.1
     steps:
       - checkout
       - attach_workspace:
