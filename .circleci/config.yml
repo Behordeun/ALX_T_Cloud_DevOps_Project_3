@@ -239,7 +239,7 @@ jobs:
       - run:
           name: Send migration result to kvdb.io
           command: |
-              sudo apt-get update && sudo apt-get install -y ca-certificates
+              # sudo apt-get update && sudo apt-get install -y ca-certificates
               if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
               then
                 curl https://kvdb.io/7wRafaoScKLygxUg7EeoYC/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
