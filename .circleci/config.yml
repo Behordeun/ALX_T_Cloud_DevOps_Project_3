@@ -219,7 +219,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:13.8.0
+      - image: node:lts-slim 
     steps:
       - checkout
       - aws-cli/setup
