@@ -1,3 +1,5 @@
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/Behordeun/ALX_T_Cloud_DevOps_Project_3/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/Behordeun/ALX_T_Cloud_DevOps_Project_3/tree/main)
+
 ## Give your Application Auto-Deploy Superpowers
 
 In this project, you will prove your mastery of the following learning objectives:
@@ -22,28 +24,29 @@ In this project, you will prove your mastery of the following learning objective
 For your submission, please submit the following:
 
 - A text file named `urls.txt` including:
+
   1. Public Url to GitHub repository (not private) [URL01]
-  1. Public URL for your S3 Bucket (aka, your green candidate front-end) [URL02]
-  1. Public URL for your CloudFront distribution (aka, your blue production front-end) [URL03]
-  1. Public URLs to deployed application back-end in EC2 [URL04]
-  1. Public URL to your Prometheus Server [URL05]
+  2. Public URL for your S3 Bucket (aka, your green candidate front-end) [URL02]
+  3. Public URL for your CloudFront distribution (aka, your blue production front-end) [URL03]
+  4. Public URLs to deployed application back-end in EC2 [URL04]
+  5. Public URL to your Prometheus Server [URL05]
 - Your screenshots in JPG or PNG format, named using the screenshot number listed in the instructions. These screenshots should be included in your code repository in the root folder.
-  1. Job failed because of compile errors. [SCREENSHOT01]
-  1. Job failed because of unit tests. [SCREENSHOT02]
-  1. Job that failed because of vulnerable packages. [SCREENSHOT03]
-  1. An alert from one of your failed builds. [SCREENSHOT04]
-  1. Appropriate job failure for infrastructure creation. [SCREENSHOT05]
-  1. Appropriate job failure for the smoke test job. [SCREENSHOT06]
-  1. Successful rollback after a failed smoke test. [SCREENSHOT07]  
-  1. Successful promotion job. [SCREENSHOT08]
-  1. Successful cleanup job. [SCREENSHOT09]
-  1. Only deploy on pushed to `master` branch. [SCREENSHOT10]
-  1. Provide a screenshot of a graph of your EC2 instance including available memory, available disk space, and CPU usage. [SCREENSHOT11]
-  1. Provide a screenshot of an alert that was sent by Prometheus. [SCREENSHOT12]
 
-- Your presentation should be in PDF format named "presentation.pdf" and should be included in your code repository root folder. 
+  1. Job failed because of compile errors. [SCREENSHOT01][SCREENSHOT01]
+  2. Job failed because of unit tests. [SCREENSHOT02][SCREENSHOT02]
+  3. Job that failed because of vulnerable packages. [SCREENSHOT03][SCREENSHOT03]
+  4. An alert from one of your failed builds. [SCREENSHOT04][SCREENSHOT04]
+  5. Appropriate job failure for infrastructure creation. [SCREENSHOT05][SCREENSHOT05]
+  6. Appropriate job failure for the smoke test job. [SCREENSHOT06][SCREENSHOT06]
+  7. Successful rollback after a failed smoke test. [SCREENSHOT07][SCREENSHOT07]
+  8. Successful promotion job. [SCREENSHOT08][SCREENSHOT08]
+  9. Successful cleanup job. [SCREENSHOT09][SCREENSHOT09]
+  10. Only deploy on pushed to `master` branch. [SCREENSHOT10][SCREENSHOT10]
+  11. Provide a screenshot of a graph of your EC2 instance including available memory, available disk space, and CPU usage. [SCREENSHOT11][SCREENSHOT11]
+  12. Provide a screenshot of an alert that was sent by Prometheus. [SCREENSHOT12][SCREENSHOT12]
+- Your presentation should be in PDF format named "presentation.pdf" and should be included in your code repository root folder.
 
-Before you submit your project, please check your work against the project rubric. If you haven’t satisfied each criterion in the rubric, then revise your work so that you have met all the requirements. 
+Before you submit your project, please check your work against the project rubric. If you haven’t satisfied each criterion in the rubric, then revise your work so that you have met all the requirements.
 
 ### Built With
 
@@ -57,7 +60,6 @@ Before you submit your project, please check your work against the project rubri
 ### License
 
 [License](LICENSE.md)
-
 
 [SCREENSHOT01]: screenshot01.png
 [SCREENSHOT02]: screenshot02.png
