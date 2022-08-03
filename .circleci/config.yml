@@ -352,7 +352,7 @@ jobs:
             cd ..
             tar -C backend -czvf backend.tar.gz .
             cd .circleci/ansible
-            echo "Contents  of the inventory.txt file is -------"
+            echo "inventory.txt contains: -------"
             cat inventory.txt
             printenv
             ansible-playbook -i inventory.txt deploy-backend.yml
@@ -496,6 +496,7 @@ jobs:
                 }
               ]
             }
+
 
 workflows:
   default:
