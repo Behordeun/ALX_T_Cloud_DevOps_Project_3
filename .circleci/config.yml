@@ -248,7 +248,7 @@ jobs:
           paths:
             - project/backend/migrations_dump.log
       - revert-migrations
-      - destroy-environment
+      - destroy_environment
 
   deploy-frontend:
     docker:
