@@ -1,6 +1,6 @@
 version: 2.1
 
-orbs: 
+orbs:
   slack: circleci/slack@4.10.1
   aws-cli: circleci/aws-cli@3.1.1
 
@@ -11,7 +11,7 @@ commands:
           event: fail
           channel: CirciCi-Behordeun
           template: basic_fail_1
-  
+
   install_awscli:
     description: Install AWS CLI v2
     steps:
@@ -30,7 +30,7 @@ commands:
             sudo apt update
             sudo apt install -y python3 python3-pip
             python3 -m pip install --user ansible
- 
+
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
@@ -54,7 +54,7 @@ commands:
       # Add parameter here
       Workflow_ID:
         type: string
-        default: ${CIRCLE_WORKFLOW_ID:0:7}     
+        default: ${CIRCLE_WORKFLOW_ID:0:7}
     steps:
       - run:
           name: Revert migrations
@@ -174,7 +174,7 @@ jobs:
               --template-file .circleci/files/backend.yml \
               --tags project=udapeople \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" 
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
       - run:
           name: Ensure front-end infrastructure exist
           command: |
@@ -196,7 +196,7 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-          
+
 
   configure-infrastructure:
     docker:
@@ -230,9 +230,10 @@ jobs:
           command: |
               cd backend
               npm i
+              npm audit fix --force --audit-level=critical
               # Run and save the migration output
               npm run migrations > migrations_dump.txt
-              
+
               # echo
               # cat migrations_dump.txt
               # echo
@@ -244,14 +245,14 @@ jobs:
               then
                 curl https://kvdb.io/7wRafaoScKLygxUg7EeoYC/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
               fi
-      
+
       - persist_to_workspace:
           root: ~/
           paths:
               - project/backend/migrations_dump.txt
       - revert-migrations
       - destroy-environment
-      
+
 
   deploy-frontend:
     docker:
@@ -264,7 +265,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update curl
-            apk add --update nodejs  
+            apk add --update nodejs
             apk add --update npm
             apk add --update ansible
             pip3 install awscli
@@ -293,7 +294,7 @@ jobs:
           paths:
             - backend_ip.txt
       - revert-migrations
-          
+
       - destroy-environment
 
   deploy-backend:
@@ -315,6 +316,7 @@ jobs:
           command: |
             cd backend
             npm i
+            npm fix audit --force --audit-level=critical
             npm run build
             ls -lh
             cd ..
@@ -358,8 +360,8 @@ jobs:
       - run:
           name: Frontend smoke test.
           command: |
-            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
-            echo ${URL} 
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"
+            echo ${URL}
             if curl -s ${URL} | grep "Welcome"
             then
                 # Change this to 0 after the job fails
@@ -369,7 +371,7 @@ jobs:
             fi
       - destroy-environment
       - revert-migrations
-      
+
 
   cloudfront-update:
     docker:
@@ -392,7 +394,7 @@ jobs:
               --stack-name InitialStack \
               --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=udapeople
-            
+
             echo "previousWorkflowID: ${previousWorkflowID}"
             echo "Current Workflow Id: ${CIRCLE_WORKFLOW_ID:0:7}"
       - persist_to_workspace:
@@ -401,7 +403,7 @@ jobs:
             - previousWorkflowID.txt
       - revert-migrations
       - destroy-environment
-      
+
 
   cleanup:
     docker:
@@ -418,12 +420,12 @@ jobs:
           name: Get and remove old stack workflow id
           command: |
             export previousWorkflowID=$(cat ~/previousWorkflowID.txt)
-            echo "${previousWorkflowID}" 
+            echo "${previousWorkflowID}"
             echo previousWorkflowID: "${previousWorkflowID}"
             echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"
-            # Fetch the stack names          
+            # Fetch the stack names
             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
-                    --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
+                    --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
             echo Stack names: "${STACKS[@]}"
             if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${previousWorkflowID}" ]]
             then
@@ -433,7 +435,7 @@ jobs:
               aws cloudformation delete-stack --stack-name "backend-${previousWorkflowID}"
               aws cloudformation delete-stack --stack-name "frontend-${previousWorkflowID}"
               echo "Successfully deleted previous resources"
-            else 
+            else
               echo "------------Error deleting resources"------------"
             fi
       - revert-migrations
