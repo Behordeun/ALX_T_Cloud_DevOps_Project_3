@@ -266,7 +266,7 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: python:3.9.1-alpine
+      - image: python:3.9.1
     steps:
       - checkout
       - attach_workspace:
@@ -296,6 +296,7 @@ jobs:
           command: |
             cd frontend
             npm install
+            npm audit fix
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
@@ -309,7 +310,7 @@ jobs:
 
   deploy-backend:
     docker:
-      - image: python:3.9.1-alpine
+      - image: python:3.9.1
     steps:
       - checkout
       - add_ssh_keys:
