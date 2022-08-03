@@ -88,6 +88,7 @@ jobs:
           key: frontend-build
       - notify_on_failure
 
+
   build-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -106,6 +107,7 @@ jobs:
           key: backend-build
       - notify_on_failure
 
+
   test-frontend:
     docker:
       - image: cimg/node:13.8.0
@@ -119,6 +121,8 @@ jobs:
             cd frontend
             npm install
             npm run test
+
+
   test-backend:
     docker:
       - image: cimg/node:13.8.0
@@ -132,6 +136,8 @@ jobs:
             cd backend
             npm install
             npm run test
+
+
   scan-frontend:
     docker:
       - image: cimg/node:13.8.0
@@ -146,6 +152,8 @@ jobs:
             npm install
             npm audit fix --force --audit-level=critical
             npm audit --audit-level=critical
+
+
   scan-backend:
     docker:
       - image: cimg/node:13.8.0
@@ -161,6 +169,8 @@ jobs:
             npm audit fix --force --audit-level=critical
             npm audit fix --force --audit-level=critical
             npm audit --audit-level=critical
+
+
   deploy-infrastructure:
     docker:
       - image: cimg/base:stable
@@ -217,9 +227,10 @@ jobs:
             ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment
 
+
   run-migrations:
     docker:
-      - image: circleci/node:alpine
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       # - aws-cli/setup
