@@ -13,30 +13,6 @@ commands:
           template: basic_fail_1
 
 
-  notify_on_success:
-      docker:
-      - image: cimg/base:stable
-      steps:
-      - slack/notify:
-          event: pass
-          channel: CircleCi-Behordeun
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
-
-
   install_awscli:
     description: Install AWS CLI v2
     steps:
@@ -98,6 +74,31 @@ commands:
 
 
 jobs:
+
+  notify_on_success:
+      docker:
+      - image: cimg/base:stable
+      steps:
+      - slack/notify:
+          event: pass
+          channel: CircleCi-Behordeun
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+
+            
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
