@@ -1,9 +1,25 @@
 version: 2.1
 
 orbs:
-  slack: circleci/slack@4.1
+  slack: circleci/slack@4.10.1
+  aws-cli: circleci/aws-cli@3.1.1
+
 
 commands:
+
+  slack_notify:
+    steps:
+      - slack/notify:
+          event: fail
+          channel: devops
+          mentions: "biodun"
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          channel: devops
+          mentions: "biodun"
+          template: success_tagged_deploy_1
+
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     steps:
@@ -14,6 +30,7 @@ commands:
             aws s3 rm "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
             aws cloudformation delete-stack --stack-name "frontend-stack-${CIRCLE_WORKFLOW_ID:0:7}"
             aws cloudformation delete-stack --stack-name "backend-stack-${CIRCLE_WORKFLOW_ID:0:7}"
+
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     steps:
@@ -29,53 +46,8 @@ commands:
               npm install
               npm run migrations:revert
             fi
-  notify:
-    description: notify slack
-    steps:
-      - slack/notify:
-          event: fail
-          custom: |
-            {
-            	"blocks": [
-            		{
-            			"type": "header",
-            			"text": {
-            				"type": "plain_text",
-            				"text": "Build Failed :x:",
-            				"emoji": true
-            			}
-            		},
-            		{
-            			"type": "section",
-            			"text": {
-            				"type": "mrkdwn",
-            				"text": "Build <$CIRCLE_BUILD_URL|#$CIRCLE_BUILD_NUM> for: *$CIRCLE_JOB* failed"
-            			}
-            		}
-            	]
-            }
-      - slack/notify:
-          event: pass
-          custom: |
-            {
-            	"blocks": [
-            		{
-            			"type": "header",
-            			"text": {
-            				"type": "plain_text",
-            				"text": "Build Passed :white_check_mark:",
-            				"emoji": true
-            			}
-            		},
-            		{
-            			"type": "section",
-            			"text": {
-            				"type": "mrkdwn",
-            				"text": "Build <$CIRCLE_BUILD_URL|#$CIRCLE_BUILD_NUM> for: *$CIRCLE_JOB* passed"
-            			}
-            		}
-            	]
-            }
+
+
 jobs:
   build-frontend:
     docker:
@@ -95,7 +67,7 @@ jobs:
           paths: [ frontend/node_modules ]
           key: frontend-build
 
-      - notify
+      - slack_notify
 
   build-backend:
     docker:
@@ -115,7 +87,7 @@ jobs:
           paths: [ backend/node_modules ]
           key: backend-build
 
-      - notify
+      - slack_notify
 
   test-frontend:
     docker:
@@ -134,7 +106,7 @@ jobs:
       - save_cache:
           paths: [ frontend/node_modules ]
           key: frontend-build
-      - notify
+      - slack_notify
 
   test-backend:
     docker:
@@ -153,7 +125,7 @@ jobs:
       - save_cache:
           paths: [ backend/node_modules ]
           key: backend-build
-      - notify
+      - slack_notify
 
   scan-frontend:
     docker:
@@ -172,7 +144,7 @@ jobs:
       - save_cache:
           paths: [ frontend/node_modules ]
           key: frontend-build
-      - notify
+      - slack_notify
 
   scan-backend:
     docker:
@@ -190,7 +162,7 @@ jobs:
       - save_cache:
           paths: [ backend/node_modules ]
           key: backend-build
-      - notify
+      - slack_notify
 
   deploy-infrastructure:
     docker:
@@ -250,7 +222,7 @@ jobs:
             export ANSIBLE_HOST_KEY_CHECKING=False
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
       - destroy-environment
-      - notify
+      - slack_notify
 
   run-migrations:
     docker:
@@ -271,7 +243,7 @@ jobs:
             --request PUT --data "1" https://api.memstash.io/values/migration_"${CIRCLE_WORKFLOW_ID:0:7}"
       - revert-migrations
       - destroy-environment
-      - notify
+      - slack_notify
 
   deploy-frontend:
     docker:
@@ -302,7 +274,7 @@ jobs:
             aws s3 cp ./dist s3://"udapeople-${CIRCLE_WORKFLOW_ID:0:7}"/ --recursive
       - revert-migrations
       - destroy-environment
-      - notify
+      - slack_notify
 
   deploy-backend:
     docker:
@@ -330,7 +302,7 @@ jobs:
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       - revert-migrations
       - destroy-environment
-      - notify
+      - slack_notify
 
   smoke-test:
     docker:
@@ -364,7 +336,7 @@ jobs:
             fi
       - revert-migrations
       - destroy-environment
-      - notify
+      - slack_notify
 
   cloudfront-update:
     docker:
@@ -401,7 +373,7 @@ jobs:
             TERM: xterm-color
 
       - destroy-environment
-      - notify
+      - slack_notify
 
 workflows:
   default:
