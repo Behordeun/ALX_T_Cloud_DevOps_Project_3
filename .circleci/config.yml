@@ -103,23 +103,23 @@ jobs:
       - slack_notify
 
 
-#  build-backend:
-#    docker:
-#      - image: circleci/node:13.8.0
-#    steps:
-#      - checkout
-#      - restore_cache:
-#          keys: [backend-build]
-#      - run:
-#          name: Back-end build
-#          command: |
-#            cd backend
-#            npm install
-#            npm run build
-#      - save_cache:
-#          paths: [backend/node_modules]
-#          key: backend-build
-#      - slack_notify
+  build-backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+          name: Back-end build
+          command: |
+            cd backend
+            npm install
+            npm run build
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-build
+      - slack_notify
 
 
   test-frontend:
