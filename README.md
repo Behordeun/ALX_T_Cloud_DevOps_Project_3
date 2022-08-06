@@ -1,4 +1,4 @@
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/Behordeun/ALX_T_Cloud_DevOps_Project_3/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/Behordeun/ALX_T_Cloud_DevOps_Project_3/tree/main)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/Behordeun/ALX_T_Cloud_DevOps_Project_3/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/Behordeun/ALX_T_Cloud_DevOps_Project_3/tree/master)
 
 ## Give your Application Auto-Deploy Superpowers
 
