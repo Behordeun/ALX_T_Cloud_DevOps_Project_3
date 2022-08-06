@@ -5,20 +5,17 @@ orbs:
   aws-cli: circleci/aws-cli@3.1.1
 
 commands:
-  notify_slack_error:
+  slack_notify:
     steps:
       - slack/notify:
           event: fail
           channel: CircleCi-Behordeun
+          mentions:
           template: basic_fail_1
-
-
-  notify_slack_pass:
-    steps:
-    - slack/notify:
-        event: pass
-        channel: CircleCi-Behordeun
-        template: basic_success_1
+      - slack/notify:
+          event: pass
+          channel: CircleCi-Behordeun
+          template: success_tagged_deploy_1
 
 
   install_awscli:
@@ -98,8 +95,7 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
-      - notify_slack_error
-      - notify_slack_pass
+      - slack_notify
 
 
   build-backend:
@@ -118,8 +114,7 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
-      - notify_slack_error
-      - notify_slack_pass
+      - slack_notify
 
 
   test-frontend:
@@ -274,8 +269,7 @@ jobs:
           root: ~/
           paths:
               - project/backend/migrations_dump.txt
-      - notify_slack_error
-      - notify_slack_pass
+      - slack_notify
       - revert-migrations
       - destroy-environment
 
@@ -312,8 +306,7 @@ jobs:
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-      - notify_slack_error
-      - notify_slack_pass
+      - slack_notify
       - destroy-environment
       - revert-migrations
 
@@ -372,8 +365,7 @@ jobs:
             cat inventory.txt
             printenv
             ansible-playbook -i inventory.txt deploy-backend.yml
-      - notify_slack_error
-      - notify_slack_pass
+      - slack_notify
       - destroy-environment
       - revert-migrations
 
@@ -412,8 +404,7 @@ jobs:
               else
                 exit 1
               fi
-        - notify_slack_error
-        - notify_slack_pass
+        - slack_notify
         - destroy-environment
         - revert-migrations
 
@@ -514,7 +505,7 @@ jobs:
                 }
               ]
             }
-            
+
 
 workflows:
   default:
