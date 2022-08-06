@@ -12,12 +12,10 @@ commands:
       - slack/notify:
           event: fail
           channel: devops
-          mentions: "biodun"
           template: basic_fail_1
       - slack/notify:
           event: pass
           channel: devops
-          mentions: "biodun"
           template: success_tagged_deploy_1
 
   destroy-environment:
