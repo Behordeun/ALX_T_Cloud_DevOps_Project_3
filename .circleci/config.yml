@@ -5,12 +5,20 @@ orbs:
   aws-cli: circleci/aws-cli@3.1.1
 
 commands:
-  notify_on_failure:
+  notify_slack_error:
     steps:
       - slack/notify:
           event: fail
           channel: CircleCi-Behordeun
           template: basic_fail_1
+
+
+  notify_slack_pass:
+    steps:
+    - slack/notify:
+        event: pass
+        channel: CircleCi-Behordeun
+        template: basic_success_1
 
 
   install_awscli:
@@ -74,31 +82,6 @@ commands:
 
 
 jobs:
-
-  notify_on_success:
-      docker:
-      - image: cimg/base:stable
-      steps:
-      - slack/notify:
-          event: pass
-          channel: CircleCi-Behordeun
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
-
-            
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -115,8 +98,8 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
-      - notify_on_failure
-      - notify_on_success
+      - notify_slack_error
+      - notify_slack_pass
 
 
   build-backend:
@@ -135,8 +118,8 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
-      - notify_on_failure
-      - notify_on_success
+      - notify_slack_error
+      - notify_slack_pass
 
 
   test-frontend:
@@ -291,8 +274,8 @@ jobs:
           root: ~/
           paths:
               - project/backend/migrations_dump.txt
-      - notify_on_failure
-      - notify_on_success
+      - notify_slack_error
+      - notify_slack_pass
       - revert-migrations
       - destroy-environment
 
@@ -329,8 +312,8 @@ jobs:
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-      - notify_on_failure
-      - notify_on_success
+      - notify_slack_error
+      - notify_slack_pass
       - destroy-environment
       - revert-migrations
 
@@ -389,8 +372,8 @@ jobs:
             cat inventory.txt
             printenv
             ansible-playbook -i inventory.txt deploy-backend.yml
-      - notify_on_failure
-      - notify_on_success
+      - notify_slack_error
+      - notify_slack_pass
       - destroy-environment
       - revert-migrations
 
@@ -429,8 +412,8 @@ jobs:
               else
                 exit 1
               fi
-        - notify_on_failure
-        - notify_on_success
+        - notify_slack_error
+        - notify_slack_pass
         - destroy-environment
         - revert-migrations
 
@@ -508,6 +491,30 @@ jobs:
                 echo "No delete stack"
               fi
 
+
+  notify_on_success:
+      docker:
+      - image: cimg/base:stable
+      steps:
+      - slack/notify:
+          event: pass
+          channel: CircleCi-Behordeun
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+            
 
 workflows:
   default:
