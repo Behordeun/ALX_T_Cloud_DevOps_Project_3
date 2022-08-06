@@ -12,6 +12,31 @@ commands:
           channel: CircleCi-Behordeun
           template: basic_fail_1
 
+
+  notify_on_success:
+      docker:
+      - image: cimg/base:stable
+      steps:
+      - slack/notify:
+          event: pass
+          channel: CircleCi-Behordeun
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+
+
   install_awscli:
     description: Install AWS CLI v2
     steps:
@@ -30,6 +55,7 @@ commands:
             sudo apt update
             sudo apt install -y python3 python3-pip
             python3 -m pip install --user ansible
+
 
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -69,6 +95,8 @@ commands:
               npm install
               npm run migration:revert
             fi
+
+
 jobs:
   build-frontend:
     docker:
@@ -87,6 +115,7 @@ jobs:
           paths: [frontend/node_modules]
           key: frontend-build
       - notify_on_failure
+      - notify_on_success
 
 
   build-backend:
@@ -106,6 +135,7 @@ jobs:
           paths: [backend/node_modules]
           key: backend-build
       - notify_on_failure
+      - notify_on_success
 
 
   test-frontend:
@@ -261,6 +291,7 @@ jobs:
           paths:
               - project/backend/migrations_dump.txt
       - notify_on_failure
+      - notify_on_success
       - revert-migrations
       - destroy-environment
 
@@ -298,6 +329,7 @@ jobs:
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       - notify_on_failure
+      - notify_on_success
       - destroy-environment
       - revert-migrations
 
@@ -357,6 +389,7 @@ jobs:
             printenv
             ansible-playbook -i inventory.txt deploy-backend.yml
       - notify_on_failure
+      - notify_on_success
       - destroy-environment
       - revert-migrations
 
@@ -396,6 +429,7 @@ jobs:
                 exit 1
               fi
         - notify_on_failure
+        - notify_on_success
         - destroy-environment
         - revert-migrations
 
@@ -472,30 +506,6 @@ jobs:
               else
                 echo "No delete stack"
               fi
-
-
-  notify_on_success:
-      docker:
-      - image: cimg/base:stable
-      steps:
-      - slack/notify:
-          event: pass
-          channel: CircleCi-Behordeun
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
 
 
 workflows:
