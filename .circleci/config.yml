@@ -9,12 +9,13 @@ commands:
     steps:
       - slack/notify:
           event: fail
-          channel: CircleCi-Behordeun
-          mentions:
+          channel: devops
+          mentions: "biodun"
           template: basic_fail_1
       - slack/notify:
           event: pass
-          channel: CircleCi-Behordeun
+          channel: devops
+          mentions: "biodun"
           template: success_tagged_deploy_1
 
 
@@ -27,6 +28,8 @@ commands:
             curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
             unzip awscliv2.zip
             sudo ./aws/install
+
+
   install_ansible:
     description: Install Ansible
     steps:
@@ -55,6 +58,8 @@ commands:
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.Workflow_ID >>
             # Delete backend stack
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.Workflow_ID >>
+
+
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow
     parameters:
@@ -98,23 +103,23 @@ jobs:
       - slack_notify
 
 
-  build-backend:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
-      - restore_cache:
-          keys: [backend-build]
-      - run:
-          name: Back-end build
-          command: |
-            cd backend
-            npm install
-            npm run build
-      - save_cache:
-          paths: [backend/node_modules]
-          key: backend-build
-      - slack_notify
+#  build-backend:
+#    docker:
+#      - image: circleci/node:13.8.0
+#    steps:
+#      - checkout
+#      - restore_cache:
+#          keys: [backend-build]
+#      - run:
+#          name: Back-end build
+#          command: |
+#            cd backend
+#            npm install
+#            npm run build
+#      - save_cache:
+#          paths: [backend/node_modules]
+#          key: backend-build
+#      - slack_notify
 
 
   test-frontend:
@@ -130,6 +135,7 @@ jobs:
             cd frontend
             npm install
             npm run test
+      - slack_notify
 
 
   test-backend:
@@ -145,6 +151,7 @@ jobs:
             cd backend
             npm install
             npm run test
+      - slack_notify
 
 
   scan-frontend:
@@ -161,6 +168,7 @@ jobs:
             npm install
             npm audit fix --force --audit-level=critical
             npm audit --audit-level=critical
+      - slack_notify
 
 
   scan-backend:
@@ -178,6 +186,7 @@ jobs:
             npm audit fix --force --audit-level=critical
             npm audit fix --force --audit-level=critical
             npm audit --audit-level=critical
+      - slack_notify
 
 
   deploy-infrastructure:
@@ -215,6 +224,7 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
+      - slack_notify
 
 
   configure-infrastructure:
@@ -234,6 +244,7 @@ jobs:
             cd .circleci/ansible
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml
+      - slack_notify
       - destroy-environment
 
 
@@ -255,6 +266,7 @@ jobs:
               npm run migrations > migrations_dump.txt
 
               cat migrations_dump.txt
+      - slack_notify
 
       - run:
           name: Send migration result to kvdb.io
