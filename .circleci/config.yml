@@ -10,11 +10,13 @@ commands:
       - slack/notify:
           event: fail
           channel: devops
+          mentions: '@biodun'
           template: basic_fail_1
-      - slack/notify:
-          event: pass
-          channel: devops
-          template: success_tagged_deploy_1
+      #- slack/notify:
+      #    event: pass
+      #    channel: devops
+      #    mentions: '@biodun'
+      #    template: success_tagged_deploy_1
 
 
   install_awscli:
@@ -82,42 +84,95 @@ commands:
 
 
 jobs:
-  build-frontend:
-    docker:
-      - image: circleci/node:13.8.0
+  install-frontend-dependencies:
+   executor: node
+   steps:
+      - checkout
+      - run:
+          name: npm install
+          working_directory: ./frontend
+          command: ls -la && npm install
+      - persist_to_workspace:
+          root: .
+          paths: [frontend/node_modules]
+
+
+  install-backend-dependencies:
+    executor: node
     steps:
       - checkout
-      - restore_cache:
-          keys: [frontend-build]
       - run:
-          name: Build front-end
-          command: |
-            cd frontend
-            npm install
-            npm run build
-      - save_cache:
-          paths: [frontend/node_modules]
-          key: frontend-build
-      - slack_notify
+          name: npm install
+          working_directory: ./backend
+          command: ls -la && npm install
+      - persist_to_workspace:
+          root: .
+          paths: [backend/node_modules]
+
+
+  build-frontend:
+    executor: node
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: npm run build
+          working_directory: ./frontend
+          command: npm run build
 
 
   build-backend:
-    docker:
-      - image: circleci/node:13.8.0
+    executor: node
     steps:
       - checkout
-      - restore_cache:
-          keys: [backend-build]
+      - attach_workspace:
+          at: .
       - run:
-          name: Back-end build
-          command: |
-            cd backend
-            npm install
-            npm run build
-      #- save_cache:
-      #    paths: [backend/node_modules]
-      #    key: backend-build
-      - slack_notify
+          name: npm run build
+          working_directory: ./backend
+          command: npm run build
+      - persist_to_workspace:
+          root: .
+          paths: [backend/node_modules]
+
+#
+#  build-frontend:
+#    docker:
+#      - image: circleci/node:13.8.0
+#    steps:
+#      - checkout
+#      - restore_cache:
+#          keys: [frontend-build]
+#      - run:
+#          name: Build front-end
+#          command: |
+#            cd frontend
+#            npm install
+#            npm run build
+#      - save_cache:
+#          paths: [frontend/node_modules]
+#          key: frontend-build
+#      - slack_notify
+#
+#
+#  build-backend:
+#    docker:
+#      - image: circleci/node:13.8.0
+#    steps:
+#      - checkout
+#      - restore_cache:
+#          keys: [backend-build]
+#      - run:
+#          name: Back-end build
+#          command: |
+#            cd backend
+#            npm install
+#            npm run build
+#      - save_cache:
+#          paths: [backend/node_modules]
+#          key: backend-build
+#      - slack_notify
 
 
   test-frontend:
