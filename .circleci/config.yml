@@ -498,21 +498,7 @@ jobs:
           event: pass
           channel: devops
           mentions: "@biodun"
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
+          template: success_tagged_deploy_1
 
 
 workflows:
