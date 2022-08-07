@@ -77,3 +77,4 @@ dist
 .circleci/config.txt
 .circleci/biodun.txt
 .circleci/config2.yml
+.circleci/config3.yml
