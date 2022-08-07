@@ -85,7 +85,7 @@ commands:
 
 jobs:
   install-frontend-dependencies:
-   executor: node
+   image: node
    steps:
       - checkout
       - run:
@@ -98,7 +98,7 @@ jobs:
 
 
   install-backend-dependencies:
-    executor: node
+    image: node
     steps:
       - checkout
       - run:
@@ -111,7 +111,8 @@ jobs:
 
 
   build-frontend:
-    executor: node
+    docker:
+    - image: cimg/node:13.8.0
     steps:
       - checkout
       - attach_workspace:
@@ -123,7 +124,8 @@ jobs:
 
 
   build-backend:
-    executor: node
+    docker:
+    - image: cimg/node:13.8.0
     steps:
       - checkout
       - attach_workspace:
