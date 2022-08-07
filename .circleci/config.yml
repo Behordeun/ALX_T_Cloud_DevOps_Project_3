@@ -10,7 +10,7 @@ commands:
       - slack/notify:
           event: fail
           channel: devops
-          mentions: "biodun"
+          mentions: "@biodun"
           template: basic_fail_1
 
 
@@ -496,7 +496,8 @@ jobs:
       steps:
       - slack/notify:
           event: pass
-          channel: CircleCi-Behordeun
+          channel: devops
+          mentions: "@biodun"
           custom: |
             {
               "blocks": [
