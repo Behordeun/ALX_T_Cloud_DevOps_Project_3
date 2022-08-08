@@ -435,6 +435,7 @@ jobs:
               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
             else
               echo "No delete stack"
+             fi
 
   notify_on_success:
       docker:
