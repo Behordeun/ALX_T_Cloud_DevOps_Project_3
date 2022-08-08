@@ -436,7 +436,6 @@ jobs:
             else
               echo "No delete stack"
              fi
-       - slack-notify
 
   notify_on_success:
       docker:
