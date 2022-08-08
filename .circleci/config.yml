@@ -436,6 +436,7 @@ jobs:
             else
               echo "No delete stack"
              fi
+       - slack-notify
 
   notify_on_success:
       docker:
@@ -445,7 +446,7 @@ jobs:
           event: pass
           channel: devops
           mentions: "@biodun"
-          template: success_tagged_deploy_
+          template: success_tagged_deploy_1
 
 workflows:
   default:
