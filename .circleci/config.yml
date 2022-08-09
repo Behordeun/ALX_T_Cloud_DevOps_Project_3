@@ -436,6 +436,9 @@ jobs:
             else
               echo "No delete stack"
              fi
+      - slack-notify
+      - destroy_environment
+      - revert-migrations
 
   notify_on_success:
       docker:
