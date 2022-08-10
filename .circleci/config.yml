@@ -2,6 +2,8 @@ version: 2.1
 
 orbs:
   slack: circleci/slack@4.10.1
+  aws-cli: circleci/aws-cli@3.1.1
+
 
 commands:
   destroy_environment:
@@ -64,6 +66,7 @@ jobs:
           key: frontend-build
       - slack-notify
 
+
   build-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -82,6 +85,7 @@ jobs:
           key: backend-build
       - slack-notify
 
+
   test-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -96,6 +100,7 @@ jobs:
             npm i
             npm run test
       - slack-notify
+
 
   test-backend:
     docker:
@@ -112,6 +117,7 @@ jobs:
             npm run test
       - slack-notify
 
+
   scan-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -127,6 +133,7 @@ jobs:
             npm audit fix --audit-level=critical --force
       - slack-notify
 
+
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -141,6 +148,7 @@ jobs:
             npm i
             npm audit fix --audit-level=critical --force
       - slack-notify
+
 
   deploy-infrastructure:
     docker:
@@ -178,7 +186,9 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
+      - slack-notify
       - destroy_environment
+
 
   configure-infrastructure:
     docker:
@@ -202,7 +212,9 @@ jobs:
           command: |
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
+      - slack-notify
       - destroy_environment
+
 
   run-migrations:
     docker:
@@ -232,8 +244,10 @@ jobs:
             then
               curl https://kvdb.io/7wRafaoScKLygxUg7EeoYC/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
-      - destroy_environment
+      - slack-notify
       - revert-migrations
+      - destroy_environment
+
 
   deploy-frontend:
     docker:
@@ -270,6 +284,7 @@ jobs:
       - slack-notify
       - destroy_environment
       - revert-migrations
+
 
   deploy-backend:
     docker:
@@ -327,6 +342,7 @@ jobs:
       - destroy_environment
       - revert-migrations
 
+
   smoke-test:
     docker:
       - image: amazon/aws-cli
@@ -364,6 +380,7 @@ jobs:
       - slack-notify
       - destroy_environment
       - revert-migrations
+
 
   cloudfront-update:
     docker:
@@ -444,6 +461,7 @@ jobs:
       - slack-notify
       - destroy_environment
       - revert-migrations
+
 
   notify_on_success:
       docker:
