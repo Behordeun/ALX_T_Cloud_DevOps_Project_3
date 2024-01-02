@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
-    "@nestjs/common": "^6.11.11",
+    "@nestjs/common": "^7.6.5",
     "@nestjs/core": "^6.11.11",
     "@nestjs/cqrs": "^6.1.0",
     "@nestjs/jwt": "^6.0.0",
